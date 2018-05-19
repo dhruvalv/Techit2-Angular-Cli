@@ -1,0 +1,73 @@
+<div>
+<div class="row" id='top' >    
+  <div class="col-md-5">
+    <button class="btn btn-warning" (click)="viewTickets()">View Tickets</button>
+  </div>
+  <div class="col-md-5" id='newticket'>
+    <button class="btn btn-warning" (click)="createClicked()">New Ticket</button>
+  </div>
+  <div class="col-md-1" id='logout'>
+      <button class="btn btn-warning" (click)="logout()">logout</button>
+  </div>
+</div>
+<p id='noticket' *ngIf="noTickets===true">Sorry!! You have not created any tickets.</p>
+<div class="row" *ngIf="tickets.length != 0">  
+        <table class='table table-bordered table-hover'  id='opachead' *ngIf="create==false">
+            <tr class='bg-warning' style='color:black'>
+              <th>No.</th>
+              <th>Subject<hr style='border: 0.5px solid #000000;'>Details</th>
+              <th>Created By<hr style='border: 0.5px solid #000000;'>Created For</th>
+              <th>Status<hr style='border: 0.5px solid #000000;'>Priority</th>
+              <th>Updates<hr style='border: 0.5px solid #000000;'>Message | Date</th>
+              <th>Unit<hr style='border: 0.5px solid #000000;'>Technician</th>
+            </tr>
+            <tr *ngFor="let ticket of tickets; let index = index">
+                <td>{{index+1}}</td>
+                <td>{{ticket.subject}}<hr style='border: 0.5px solid #FFFFFF;'>{{ticket.details}}</td>
+                <td>{{ticket.createdBy.email}}<hr style='border: 0.5px solid #FFFFFF;'>{{ticket.createdForEmail}}</td>
+                <td>{{ticket.status}}<hr style='border: 0.5px solid #FFFFFF;'>{{ticket.priority}}</td>
+                <td><table border="1">
+                        <tr *ngFor="let update of ticket.updates; let index = index">
+                            <td>{{update.details}}</td>
+                            <td>{{update.date}}</td>
+                        </tr>
+                    </table>
+                </td>
+                <td>{{ticket.unit.name}}<hr style='border: 0.5px solid #FFFFFF;'><div *ngIf="ticket.technicians.length > 0"><p *ngFor="let technician of ticket.technicians">{{technician.email}}</p></div></td>
+            </tr>
+          </table>
+</div>
+<div class="row"  *ngIf="create==true">  
+    <div class="col-md-6 mx-auto" >
+    <div class="card">
+        <div class="card-header">
+            <h4>Create A New Ticket</h4>
+        </div>
+        <div class="card-body">
+            <form class="form">
+                <div class="form-group">
+                    <label for="uname1">Subject</label>
+                    <input type="text" class="form-control form-control-lg rounded-0" name="subject"  required="" [(ngModel)]="ticket.subject" (keyup)="onKey($event)">
+                </div>
+                <div class="form-group">
+                    <label for="uname1">Details</label>
+                    <input type="text" class="form-control form-control-lg rounded-0" name="details" required="" [(ngModel)]="ticket.details" (keyup)="onKey($event)">
+                </div>
+                <div class="form-group">
+                    <label for="uname1">Creating For(Email) </label>
+                    <input type="text" class="form-control form-control-lg rounded-0" name="createdForEmail" required="" [(ngModel)]="ticket.createdForEmail" (keyup)="onKey($event)">
+                </div>
+                <div class="form-group">
+                    <label for="uname1">Unit <small> (1 : TechOps, 2 : ITC)</small></label>
+                    <input type="text" class="form-control form-control-lg rounded-0" name="unit" required="" [(ngModel)]="ticket.unit" (keyup)="onKey($event)">
+                </div>
+                <br>
+                <button type="submit" (click)="createTicket()" class="btn btn-warning float-right" id="btnLogin">Create</button>
+                <p *ngIf="datamissing===true" style='color:red'>All the fields are mandatory</p>
+                <p *ngIf="unitNotFound===true" style='color:red'>Sorry! Invalid Unit, Provide valid Unit Number</p>
+            </form>
+        </div>
+      </div>
+    </div>
+</div>
+</div>
